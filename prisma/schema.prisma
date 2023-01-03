@@ -1,6 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -11,17 +8,65 @@ datasource db {
 }
 
 model User {
-  Id   Int     @id @unique @default(autoincrement())
-  username String  @unique
-  password String
-  email    String  @unique
-  role     Role    @default(USER)
+  username  String      @unique
+  password  String
+  email     String      @unique
+  role      Role        @default(USER)
   firstName String
-  lastName String
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  lastName  String
+  createdAt DateTime    @default(now())
+  updatedAt DateTime    @updatedAt
+  Id        Int         @id @unique @default(autoincrement())
+  contract  contract[]
+  LeaveDays LeaveDays[]
 
   @@map("user")
+}
+
+model National_leave_day {
+  Id         Int      @id @unique @default(autoincrement())
+  content    String
+  from       DateTime
+  to         DateTime
+  markSalary Boolean
+
+  @@map("national_leave_day")
+}
+
+model LeaveDays {
+  Id          Int      @id @unique @default(autoincrement())
+  userId      Int
+  type        Int
+  from        DateTime
+  to          DateTime
+  content     String
+  status      Int
+  approved_at DateTime
+  user        User     @relation(fields: [userId], references: [Id])
+
+  @@map("leavedays")
+}
+
+model contract {
+  Id             Int          @id @unique @default(autoincrement())
+  userId         Int
+  typecontractID Int
+  startDate      DateTime
+  endDate        DateTime
+  basicSalary    Decimal
+  typecontract   typeContract @relation(fields: [typecontractID], references: [Id])
+  user           User         @relation(fields: [userId], references: [Id])
+
+  @@map("contract")
+}
+
+model typeContract {
+  Id           Int        @id @unique @default(autoincrement())
+  contractName String
+  updatedAt    DateTime   @updatedAt
+  contract     contract[]
+
+  @@map("typecontract")
 }
 
 enum Role {

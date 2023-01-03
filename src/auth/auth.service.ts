@@ -50,7 +50,6 @@ export class AuthService {
             },
         });
         if (!user) throw new ForbiddenException('Tài khoản hoặc mật khẩu không chính xác');
-
         const pwMatches = await argon.verify(user.password, dto.password);
         if (!pwMatches) throw new ForbiddenException('Tài khoản hoặc mật khẩu không chính xác');
         return this.loginToken(user.Id, user.username, user.email, user.role);
