@@ -1,0 +1,18 @@
+# verion: '3.8'
+services:
+  dev-database:
+    image: postgres
+    container_name: dev-database
+    ports:
+      - 5432:5432
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 123456
+      POSTGRES_DB: nestJS
+    networks:
+      - nestjs-network
+networks:
+  nestjs-network:
+
+
+#docker conpose up -d
